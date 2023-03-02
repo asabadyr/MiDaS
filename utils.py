@@ -163,7 +163,7 @@ def resize_depth(depth, width, height):
 
     return depth_resized
 
-def write_depth(path, depth, grayscale, bits=1):
+def write_depth(path, depth, grayscale, bits=1, invert=False):
     """Write depth map to png file.
 
     Args:
@@ -190,7 +190,8 @@ def write_depth(path, depth, grayscale, bits=1):
 
     if not grayscale:
         out = cv2.applyColorMap(np.uint8(out), cv2.COLORMAP_INFERNO)
-
+    if invert:
+        out = cv2.bitwise_not(out)
     if bits == 1:
         cv2.imwrite(path + ".png", out.astype("uint8"))
     elif bits == 2:
