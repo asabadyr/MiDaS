@@ -171,8 +171,8 @@ def write_depth(path, depth, grayscale, bits=1, invert=False):
         depth (array): depth
         grayscale (bool): use a grayscale colormap?
     """
-    if not grayscale:
-        bits = 1
+#    if not grayscale:
+    bits = 1
 
     if not np.isfinite(depth).all():
         depth=np.nan_to_num(depth, nan=0.0, posinf=0.0, neginf=0.0)
@@ -189,9 +189,14 @@ def write_depth(path, depth, grayscale, bits=1, invert=False):
         out = np.zeros(depth.shape, dtype=depth.dtype)
 
     if not grayscale:
+        print("why inferno?")
+        print(grayscale)
         out = cv2.applyColorMap(np.uint8(out), cv2.COLORMAP_INFERNO)
-    if invert:
-        out = cv2.bitwise_not(out)
+    out = cv2.threshold(np.uint8(out), 127, 255, cv2.THRESH_BINARY_INV)[1]
+#    if invert:
+#        print("APPLY invert")
+#        out = cv2.bitwise_not(np.uint16(out))
+#    out = cv2.threshold(np.uint16(out), 0, 255, cv2.THRESH_BINARY_INV+cv2.THRESH_OTSU)[1]
     if bits == 1:
         cv2.imwrite(path + ".png", out.astype("uint8"))
     elif bits == 2:

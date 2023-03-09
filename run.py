@@ -103,7 +103,7 @@ def create_side_by_side(image, depth, grayscale):
 
 
 def run(input_path, output_path, model_path, model_type="dpt_beit_large_512", optimize=False, side=False, height=None,
-        square=False, grayscale=False, invert=False):
+        square=False, grayscale=True, invert=True):
     """Run MonoDepthNN to compute depth maps.
 
     Args:
@@ -158,15 +158,15 @@ def run(input_path, output_path, model_path, model_type="dpt_beit_large_512", op
             # output
             if output_path is not None:
                 filename = os.path.join(
-                    output_path, os.path.splitext(os.path.basename(image_name))[0] + '-' + model_type
+                    output_path, os.path.splitext(os.path.basename(image_name))[0]
                 )
                 if not side:
-                    utils.write_depth(filename, prediction, grayscale, bits=2, invert)
+                    utils.write_depth(filename, prediction, grayscale, bits=2, invert=invert)
                 else:
                     original_image_bgr = np.flip(original_image_rgb, 2)
                     content = create_side_by_side(original_image_bgr*255, prediction, grayscale)
                     cv2.imwrite(filename + ".png", content)
-                utils.write_pfm(filename + ".pfm", prediction.astype(np.float32))
+#                utils.write_pfm(filename + ".pfm", prediction.astype(np.float32))
 
     else:
         with torch.no_grad():
