@@ -192,7 +192,7 @@ def write_depth(path, depth, grayscale, bits=1, invert=False):
         print("why inferno?")
         print(grayscale)
         out = cv2.applyColorMap(np.uint8(out), cv2.COLORMAP_INFERNO)
-    out = cv2.threshold(np.uint8(out), 127, 255, cv2.THRESH_BINARY_INV)[1]
+    out = cv2.threshold(np.uint8(out), 118, 255, cv2.THRESH_BINARY_INV)[1]
 #    if invert:
 #        print("APPLY invert")
 #        out = cv2.bitwise_not(np.uint16(out))
